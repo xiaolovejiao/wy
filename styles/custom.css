@@ -1,0 +1,147 @@
+/* 可编辑标签样式 */
+.editable-label {
+    position: relative;
+    cursor: pointer;
+    padding-right: 5px;
+}
+
+.editable-label:hover {
+    text-decoration: underline;
+}
+
+/* 小编辑按钮样式 */
+.small-edit-btn {
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    line-height: 18px;
+    padding: 0;
+    margin-left: 5px;
+    vertical-align: middle;
+    opacity: 0.7;
+}
+
+.small-edit-btn:hover {
+    opacity: 1;
+}
+
+/* 在一起天数样式优化 */
+.together-days {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.together-days:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.together-days:hover::after {
+    content: '点击编辑';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+#togetherDaysCount {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 3px;
+}
+
+/* 优化爱心动画 */
+.heart-icon {
+    transition: transform 0.3s ease;
+    will-change: transform;
+    position: relative;
+}
+
+.heart-icon::after {
+    content: '❤';
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.4;
+    filter: blur(4px);
+    z-index: -1;
+    animation: glowPulse 2s infinite alternate;
+}
+
+@keyframes heartPulse {
+    0% { 
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% { 
+        transform: scale(1.4);
+        filter: brightness(1.3);
+    }
+    100% { 
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes heartFloat {
+    0% { 
+        transform: translateY(0) scale(1);
+        filter: brightness(1);
+    }
+    50% { 
+        transform: translateY(-10px) scale(1.1);
+        filter: brightness(1.2);
+    }
+    100% { 
+        transform: translateY(0) scale(1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes glowPulse {
+    0% { 
+        opacity: 0.2;
+        transform: scale(1.2);
+    }
+    100% { 
+        opacity: 0.6;
+        transform: scale(1.6);
+    }
+}
+
+/* 主题特定的爱心样式 */
+.theme-cool .heart-icon {
+    color: #ffd700 !important;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
+                 0 0 40px rgba(255, 215, 0, 0.4) !important;
+}
+
+.theme-cool .heart-icon::after {
+    color: #ffd700;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+}
+
+.theme-starry .heart-icon {
+    color: #ff6b8b !important;
+    text-shadow: 0 0 20px rgba(255, 107, 139, 0.8),
+                 0 0 40px rgba(255, 107, 139, 0.4) !important;
+}
+
+.theme-starry .heart-icon::after {
+    color: #ff6b8b;
+    text-shadow: 0 0 30px rgba(255, 107, 139, 0.8);
+} 

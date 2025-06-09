@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>甜蜜空间 - 我们的幸福空间</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/themes.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/modal.css">
+    <link rel="stylesheet" href="styles/custom.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 页面加载动画 */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
+        }
+        
+        .loader-content {
+            text-align: center;
+            position: relative;
+        }
+        
+        .loader-heart {
+            font-size: 60px;
+            color: #ff6b8b;
+            animation: pulseLoader 1.2s infinite;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .loader-heart::before,
+        .loader-heart::after {
+            content: "~♡~";
+            position: absolute;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.8);
+            animation: waveText 2s infinite;
+        }
+        
+        .loader-heart::before {
+            left: -70px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .loader-heart::after {
+            right: -70px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            letter-spacing: 2px;
+            animation: fadeInOut 2s infinite;
+        }
+        
+        @keyframes pulseLoader {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.3); filter: brightness(1.3); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        
+        @keyframes waveText {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+        
+        /* 时光轴样式增强 */
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            margin-top: 15px;
+            max-height: none; /* 移除最大高度限制 */
+            overflow: visible; /* 允许内容溢出 */
+        }
+        
+        .timeline-event {
+            position: relative;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: visible; /* 修改为visible允许内容溢出 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            height: auto; /* 自动高度 */
+            min-height: auto; /* 允许高度自适应 */
+        }
+        
+        .timeline-event:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .timeline-date {
+            background: rgba(0, 0, 0, 0.3);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .timeline-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .timeline-content h3 {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.2rem;
+        }
+        
+        .timeline-content p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            word-wrap: break-word; /* 确保长文本会换行 */
+            overflow-wrap: break-word; /* 现代浏览器的换行支持 */
+        }
+        
+        .timeline-event-image {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 5px 0;
+        }
+        
+        .timeline-author {
+            text-align: right;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        /* 时光记忆弹窗样式 */
+        .image-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .image-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .image-action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .image-action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .image-action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-icon {
+            font-size: 16px;
+        }
+        
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .upload-icon {
+            font-size: 24px;
+        }
+        
+        .image-preview {
+            position: relative;
+            max-width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .image-preview img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .image-preview button {
+            position: absolute;
+            top: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+        
+        .image-preview button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        #changeImageBtn {
+            right: 10px;
+        }
+        
+        #removeImageBtn {
+            right: 70px;
+            background: rgba(255, 50, 50, 0.6);
+        }
+        
+        #removeImageBtn:hover {
+            background: rgba(255, 50, 50, 0.8);
+        }
+        
+        .album-select-area {
+            margin-top: 10px;
+        }
+        
+        .album-select-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .album-dropdown {
+            flex: 1;
+            padding: 8px;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .back-btn {
+            background: rgba(100, 100, 100, 0.3);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 0 10px;
+            cursor: pointer;
+        }
+        
+        .back-btn:hover {
+            background: rgba(100, 100, 100, 0.5);
+        }
+        
+        .album-photos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+        
+        .album-photo {
+            position: relative;
+            padding-top: 100%; /* 1:1 比例 */
+            overflow: hidden;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .album-photo img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .album-photo.selected {
+            border: 2px solid #ff6b8b;
+        }
+        
+        .album-photo:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* 自定义下拉框样式 */
+        .custom-select-container {
+            flex: 1;
+            position: relative;
+        }
+        
+        .album-dropdown {
+            width: 100%;
+            padding: 8px;
+            padding-left: 35px; /* 为缩略图留出空间 */
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+        }
+        
+        .album-dropdown option {
+            padding: 8px;
+            background-color: #2a2a2a;
+            color: white;
+        }
+        
+        .album-dropdown option:first-child {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* 日期输入框样式 */
+        #timelineDate {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 14px;
+        }
+        
+        #timelineDate::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+        
+        /* 图片查看器样式 */
+        .image-viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .image-viewer.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+        
+        .image-viewer-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            margin: auto;
+        }
+        
+        .image-viewer-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            transform-origin: center;
+            transition: transform 0.3s ease;
+            cursor: move;
+        }
+        
+        .close-viewer {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 1;
+        }
+        
+        .zoom-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 20px;
+        }
+        
+        .zoom-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .zoom-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 时光记忆卡片中的图片样式 */
+        .timeline-event-image {
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
+        }
+        
+        .timeline-event-image:hover {
+            transform: scale(1.02);
+        }
+        
+        /* 删除按钮和确认样式 */
+        .timeline-controls {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            gap: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 5;
+        }
+        
+        .timeline-event:hover .timeline-controls {
+            opacity: 1;
+        }
+        
+        .timeline-control-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .timeline-control-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+        
+        .delete-btn {
+            background: rgba(220, 53, 69, 0.6);
+        }
+        
+        .delete-btn:hover {
+            background: rgba(220, 53, 69, 0.8);
+        }
+        
+        /* 确认删除弹窗 */
+        .btn-danger {
+            background: rgba(220, 53, 69, 0.8);
+            color: white;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-danger:hover {
+            background: rgba(220, 53, 69, 1);
+        }
+        
+        .alert-icon.warning {
+            color: #ffc107;
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .justify-center {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        @keyframes heartPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes heartFloat {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-3px) scale(1.05); }
+            100% { transform: translateY(0) scale(1); }
+        }
+        
+        .heart-icon::after {
+            content: '❤';
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.3;
+            filter: blur(3px);
+            z-index: -1;
+            animation: glowPulse 3s infinite alternate;
+        }
+        
+        @keyframes glowPulse {
+            0% { opacity: 0.2; transform: scale(1.1); }
+            100% { opacity: 0.4; transform: scale(1.3); }
+        }
+        
+        .avatar-card {
+            width: 280px !important;
+            padding: 20px 25px !important;
+            height: auto !important;
+            min-height: 0 !important;
+        }
+        
+        .avatar-img {
+            width: 100px !important;
+            height: 100px !important;
+            margin-bottom: 10px !important;
+        }
+        
+        /* 表情悬停提示样式 */
+        .mood-btn {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .mood-btn::after {
+            content: attr(data-text);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+        
+        .mood-btn:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* 调整心情选择器的样式以适应提示 */
+        .mood-selector {
+            padding-bottom: 25px !important;
+            gap: 15px !important;
+        }
+        
+        /* 留言板增强样式 */
+        .message-item {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .message-actions {
+            margin-left: auto;
+        }
+        
+        .delete-message-btn,
+        .quote-message-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            padding: 3px 6px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+        }
+        
+        .delete-message-btn:hover,
+        .quote-message-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .quote-area {
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 3px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .quote-content {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .quote-sender {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .clear-quote-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            padding: 0 5px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .clear-quote-btn:hover {
+            opacity: 1;
+        }
+        
+        .quoted-message {
+            background: rgba(0, 0, 0, 0.15);
+            border-left: 3px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        .quoted-sender {
+            font-weight: bold;
+            margin-bottom: 3px;
+            opacity: 0.9;
+        }
+        
+        .quoted-content {
+            opacity: 0.8;
+        }
+        
+        /* 弹窗样式修复 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: auto;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex !important;
+        }
+        
+        .modal-content {
+            background-color: rgba(30, 30, 40, 0.85);
+            margin: auto;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .small-modal {
+            max-width: 350px;
+        }
+        
+        .compact-modal {
+            padding: 15px;
+        }
+        
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .close-btn:hover {
+            color: white;
+        }
+        
+        .modal-header {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .alert-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .justify-center {
+            justify-content: center;
+        }
+        
+        .btn-primary, .btn-cancel, .btn-danger {
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background: rgba(100, 149, 237, 0.8);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: rgba(100, 149, 237, 1);
+        }
+        
+        .btn-cancel {
+            background: rgba(150, 150, 150, 0.3);
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: rgba(150, 150, 150, 0.5);
+        }
+        
+        .btn-danger {
+            background: rgba(220, 53, 69, 0.8);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: rgba(220, 53, 69, 1);
+        }
+
+        /* 音乐播放器样式 */
+        .music-player-icon {
+            position: fixed;
+            bottom: auto;
+            right: auto;
+            top: 20px;
+            left: 20px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .music-player-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .music-player-icon i {
+            font-size: 18px;
+            color: white;
+        }
+        
+        /* 音乐播放器模态框 */
+        .music-player-modal {
+            position: fixed;
+            bottom: auto;
+            right: auto;
+            top: 65px;
+            left: 20px;
+            width: 250px;
+            background-color: rgba(18, 21, 34, 0.95);
+            border-radius: 10px;
+            color: white;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            display: none;
+            overflow: hidden;
+            max-height: 80vh;
+            flex-direction: column;
+        }
+        
+        .music-player-modal.show {
+            display: flex;
+        }
+        
+        .music-player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .music-player-title {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .music-info {
+            padding: 8px 12px;
+            text-align: center;
+        }
+        
+        #musicTitle {
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .music-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px 12px 8px;
+        }
+        
+        .music-control-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            padding: 0;
+            margin: 0 2px;
+        }
+        
+        .music-control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .music-progress {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 8px 12px;
+            cursor: pointer;
+            position: relative;
+            border-radius: 2px;
+        }
+        
+        .music-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4d9aff, #ff6b8b);
+            width: 20%;
+            border-radius: 2px;
+            transition: width 0.1s linear;
+        }
+        
+        .music-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0 12px;
+            margin-bottom: 8px;
+        }
+        
+        /* 音量控制 */
+        .volume-control {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .volume-slider-container {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 60px;
+            display: none;
+            z-index: 1100;
+        }
+        
+        .volume-slider-container.show {
+            display: block;
+        }
+        
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 50px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            transform: rotate(-90deg);
+            transform-origin: center;
+            position: absolute;
+            top: 30px;
+            left: -10px;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            border: none;
+        }
+        
+        /* 播放列表部分 */
+        .music-list-section {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 8px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .music-list-header {
+            display: flex;
+            align-items: center;
+            padding: 0 12px 8px;
+            flex-wrap: wrap;
+        }
+        
+        .music-list-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+        
+        #songCount {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            flex: 1;
+            white-space: nowrap;
+        }
+        
+        .music-list-actions {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .music-refresh-btn,
+        .music-add-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .music-refresh-btn:hover,
+        .music-add-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .music-search {
+            padding: 0 12px 8px;
+        }
+        
+        .music-search input {
+            width: 100%;
+            padding: 5px 8px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 11px;
+            outline: none;
+        }
+        
+        .music-list {
+            overflow-y: auto;
+            max-height: 200px;
+            padding: 0 12px;
+        }
+        
+        .music-list::-webkit-scrollbar {
+            width: 3px;
+        }
+        
+        .music-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .music-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+        
+        .music-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+        }
+        
+        .music-item:last-child {
+            border-bottom: none;
+        }
+        
+        .music-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .music-item.playing {
+            color: #4d9aff;
+        }
+        
+        .music-item-info {
+            flex: 1;
+            overflow: hidden;
+            padding-right: 8px;
+        }
+        
+        .music-item-title {
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .music-item-artist {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .music-item-actions {
+            display: flex;
+        }
+        
+        .music-action-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .music-action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 删除确认弹窗样式 */
+        #confirmDeleteMusicModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1200;
+        }
+        
+        #confirmDeleteMusicModal.show {
+            display: flex;
+        }
+        
+        #confirmDeleteMusicModal .modal-content {
+            width: 220px;
+            background: rgba(18, 21, 34, 0.95);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .delete-modal-body {
+            margin-bottom: 12px;
+            color: white;
+        }
+        
+        .delete-modal-body p {
+            margin: 0 0 10px 0;
+            font-size: 13px;
+        }
+        
+        .delete-modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .delete-btn-cancel,
+        .delete-btn-confirm {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+        }
+        
+        .delete-btn-cancel {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .delete-btn-confirm {
+            background: #ff5252;
+            color: white;
+        }
+        
+        .delete-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .delete-btn-confirm:hover {
+            background: #ff3030;
+        }
+        
+        /* 动画效果 */
+        @keyframes musicNote {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #refreshMusicBtn.spinning {
+            animation: spin 1s linear;
+        }
+        
+        /* 音乐来源标识 */
+        .music-source {
+            font-size: 10px;
+            margin-left: 3px;
+            opacity: 0.7;
+        }
+        
+        .music-source.local {
+            color: #4fc3f7;
+        }
+        
+        .music-source.cloud {
+            color: #81c784;
+        }
+        
+        /* 空列表提示 */
+        .empty-music-tip {
+            text-align: center;
+            padding: 15px 0;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        /* 移动端适配样式 */
+        @media screen and (max-width: 768px) {
+            /* 页面整体布局调整 */
+            .page-container {
+                padding: 10px;
+            }
+            
+            /* 头部导航适配 */
+            .main-header {
+                padding: 10px;
+            }
+            
+            .main-nav {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            /* 情侣头像区域适配 */
+            .couple-avatars {
+                flex-direction: column;
+                gap: 20px;
+                padding: 10px;
+            }
+            
+            .avatar-card {
+                width: 100% !important;
+                max-width: 280px;
+                margin: 0 auto;
+            }
+            
+            .heart-container {
+                margin: 20px 0;
+            }
+            
+            /* 爱情空间区域适配 */
+            .love-dashboard {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .dashboard-card {
+                width: 100%;
+                margin: 0;
+            }
+            
+            /* 相册和留言板适配 */
+            .interactive-zone {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .zone-card {
+                width: 100%;
+                margin: 0;
+            }
+            
+            /* 音乐播放器适配 */
+            .music-player-modal {
+                width: 90%;
+                max-width: 300px;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 80px;
+            }
+            
+            .music-player-icon {
+                top: 20px;
+                left: 20px;
+            }
+            
+            .music-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px;
+            }
+            
+            .music-list {
+                max-height: 150px;
+            }
+            
+            /* 弹窗适配 */
+            .modal-content {
+                width: 90%;
+                max-width: 320px;
+                margin: 20px;
+                padding: 15px;
+            }
+            
+            /* 时光轴适配 */
+            .timeline-event {
+                margin: 10px 0;
+            }
+            
+            .timeline-content {
+                padding: 10px;
+            }
+            
+            .timeline-event-image {
+                max-height: 200px;
+            }
+            
+            /* 表单元素适配 */
+            input[type="text"],
+            input[type="date"],
+            textarea {
+                width: 100%;
+                font-size: 16px; /* 防止iOS自动缩放 */
+            }
+            
+            /* 按钮适配 */
+            .btn-primary,
+            .btn-cancel,
+            .btn-danger {
+                padding: 8px 15px;
+                font-size: 14px;
+                min-width: 80px;
+            }
+            
+            /* 心情选择器适配 */
+            .mood-selector {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 8px;
+                padding: 10px;
+            }
+            
+            .mood-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 20px;
+            }
+            
+            /* 相册预览适配 */
+            .albums-preview {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            /* 留言板适配 */
+            .message-board {
+                padding: 10px;
+            }
+            
+            .message-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            #messageInput {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            /* 图片查看器适配 */
+            .image-viewer-content {
+                width: 90%;
+                max-width: none;
+            }
+            
+            .zoom-controls {
+                bottom: 40px;
+            }
+            
+            /* 音量控制适配 */
+            .volume-slider-container {
+                bottom: 35px;
+            }
+            
+            /* 倒计时卡片适配 */
+            .countdown-card {
+                padding: 15px;
+            }
+            
+            .countdown {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            /* 导航按钮适配 */
+            .nav-link {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+            
+            /* 主题切换按钮适配 */
+            .theme-toggle-btn {
+                width: 35px;
+                height: 35px;
+            }
+            
+            /* 相册操作按钮适配 */
+            .albums-action-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body class="theme-starry">
+    <!-- 音乐播放器图标 -->
+    <div class="music-player-icon" id="musicPlayerIcon">
+        <i>🎵</i>
+    </div>
+
+    <!-- 音乐播放器模态框 -->
+    <div class="music-player-modal" id="musicPlayerModal">
+        <div class="music-player-header">
+            <div class="music-player-title">音乐播放器</div>
+            <button class="music-control-btn" id="closePlayerBtn">×</button>
+        </div>
+        <div class="music-info">
+            <div id="musicTitle">暂无播放</div>
+        </div>
+        <div class="music-controls">
+            <button class="music-control-btn" id="prevBtn" title="上一首">⏮</button>
+            <button class="music-control-btn" id="playPauseBtn" title="播放/暂停">⏸</button>
+            <button class="music-control-btn" id="nextBtn" title="下一首">⏭</button>
+            <button class="music-control-btn" id="playModeBtn" title="播放模式">🔀</button>
+            <button class="music-control-btn" id="loopModeBtn" title="循环模式">🔁</button>
+            <div class="volume-control">
+                <button class="music-control-btn" id="volumeBtn" title="音量">🔊</button>
+                <div class="volume-slider-container" id="volumeContainer">
+                    <input type="range" min="0" max="100" value="80" class="volume-slider" id="volumeSlider">
+                </div>
+            </div>
+        </div>
+        <div class="music-progress">
+            <div class="music-progress-bar"></div>
+        </div>
+        <div class="music-time">
+            <span id="currentTime">0:00</span>
+            <span id="totalTime">0:00</span>
+        </div>
+        <div class="music-list-section">
+            <div class="music-list-header">
+                <div class="music-list-title">播放列表</div>
+                <span id="songCount">共 0 首歌曲</span>
+                <div class="music-list-actions">
+                    <button class="music-refresh-btn" id="refreshMusicBtn" title="刷新列表">🔄</button>
+                    <button class="music-add-btn" id="addMusicBtn" title="添加音乐">➕</button>
+                    <input type="file" id="musicFileInput" accept="audio/*" multiple style="display: none;">
+                </div>
+            </div>
+            <div class="music-search">
+                <input type="text" id="musicSearchInput" placeholder="搜索音乐...">
+            </div>
+            <div class="music-list" id="musicListContainer">
+                <!-- 音乐列表将由JS动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 页面加载动画 -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-heart">❤</div>
+            <div class="loader-text">正在加载我们的甜蜜空间...</div>
+        </div>
+    </div>
+    
+    <!-- 动态背景容器会由JavaScript自动创建 -->
+    <div class="page-container">
+        <header class="main-header">
+            <nav class="main-nav">
+                <div class="theme-switcher">
+                    <button class="theme-toggle-btn" id="themeToggleBtn">
+                        <i>🎨</i>
+                    </button>
+                    <div class="theme-icons">
+                        <div class="theme-icon" data-theme="starry" title="星空梦幻风">
+                            <span class="theme-preview starry-preview"></span>
+                        </div>
+                        <div class="theme-icon" data-theme="cool" title="非主流酷炫浪漫风">
+                            <span class="theme-preview cool-preview"></span>
+                        </div>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="nav-link">退出登录</button>
+            </nav>
+        </header>
+
+        <main class="home-content">
+            <section class="couple-info">
+                <div class="couple-avatars">
+                    <div class="avatar-card">
+                        <img src="images/male-avatar.png" alt="罗枭" class="avatar-img" id="maleAvatar" onclick="viewProfile('male')" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSI4MCIgcj0iNTAiIGZpbGw9IiM2NjY2NjYiLz48cGF0aCBkPSJNMzAsMTgwIEMzMCwxMjAgMTcwLDEyMCAxNzAsMTgwIiBmaWxsPSIjNjY2NjY2Ii8+PC9zdmc+'">
+                        <h3>罗枭</h3>
+                        <p class="love-status">在线</p>
+                        <div class="user-birthday">
+                            <span>5月15日</span>
+                            <span class="divider">|</span>
+                            <span>28岁</span>
+                        </div>
+                        <div class="love-declaration" id="male-declaration">
+                            <p>你是我生命中最美丽的意外，遇见你是我最大的幸运。</p>
+                            <button class="edit-btn" onclick="editDeclaration('male')"><i>✎</i></button>
+                        </div>
+                    </div>
+                    <div class="heart-container">
+                        <div class="connection-lines">
+                            <div class="line left-line"></div>
+                            <div class="line right-line"></div>
+                            <div class="connection-dot dot1"></div>
+                            <div class="connection-dot dot2"></div>
+                            <div class="connection-dot dot3"></div>
+                            <div class="connection-dot dot4"></div>
+                            <div class="connection-dot dot5"></div>
+                            <div class="connection-dot dot6"></div>
+                        </div>
+                        <div class="heart-icon" style="font-size: 45px; position: relative; z-index: 5; transform-origin: center; animation: heartPulse 0.8s infinite, heartFloat 3s ease-in-out infinite alternate;">❤</div>
+                        <div class="together-days" id="togetherDays">
+                            <span id="togetherLabel" class="editable-label">在一起</span>
+                            <span id="togetherDaysCount">365</span>
+                            <span>天</span>
+                        </div>
+                    </div>
+                    <div class="avatar-card">
+                        <img src="images/female-avatar.png" alt="赖姣姣" class="avatar-img" id="femaleAvatar" onclick="viewProfile('female')" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSI4MCIgcj0iNTAiIGZpbGw9IiNmZjY2OTkiLz48cGF0aCBkPSJNMzAsMTgwIEMzMCwxMjAgMTcwLDEyMCAxNzAsMTgwIiBmaWxsPSIjZmY2Njk5Ii8+PC9zdmc+'">
+                        <h3>赖姣姣</h3>
+                        <p class="love-status">在线</p>
+                        <div class="user-birthday">
+                            <span>8月23日</span>
+                            <span class="divider">|</span>
+                            <span>26岁</span>
+                        </div>
+                        <div class="love-declaration" id="female-declaration">
+                            <p>有你的日子都是晴天，我愿意陪你走过所有的风风雨雨。</p>
+                            <button class="edit-btn" onclick="editDeclaration('female')"><i>✎</i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="love-space-section">
+                <h2>爱情空间</h2>
+                <div class="love-space-container">
+                    <div class="love-dashboard">
+                        <div class="dashboard-card quote-card">
+                            <h3>今日甜蜜语录</h3>
+                            <blockquote id="dailyQuote">每一天都因为有你而变得特别美好</blockquote>
+                        </div>
+                        <div class="dashboard-card countdown-card">
+                            <h3 id="countdownTitle">纪念日倒计时</h3>
+                            <div class="countdown">
+                                <div class="countdown-value">
+                                    <span id="countdownDays">212</span>
+                                    <span class="countdown-label">天</span>
+                                </div>
+                                <div id="countdownTime" class="countdown-time">00:00:00</div>
+                            </div>
+                            <p id="countdownDescription">距离我们的2025周年纪念日</p>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>今日心情</h3>
+                            <div class="couple-moods">
+                                <div class="person-mood">
+                                    <div class="person-name">罗枭</div>
+                                    <div class="mood-display" id="maleMoodDisplay">未选择</div>
+                                    <button class="select-mood-btn" id="selectMaleMood">选择心情</button>
+                                </div>
+                                <div class="mood-divider"></div>
+                                <div class="person-mood">
+                                    <div class="person-name">赖姣姣</div>
+                                    <div class="mood-display" id="femaleMoodDisplay">未选择</div>
+                                    <button class="select-mood-btn" id="selectFemaleMood">选择心情</button>
+                                </div>
+                            </div>
+                            <div class="mood-selector" id="moodSelector">
+                                <button class="mood-btn" data-mood="happy" data-text="开心">😊</button>
+                                <button class="mood-btn" data-mood="love" data-text="恋爱">😍</button>
+                                <button class="mood-btn" data-mood="miss" data-text="想你">🥺</button>
+                                <button class="mood-btn" data-mood="sad" data-text="难过">😢</button>
+                                <button class="mood-btn" data-mood="angry" data-text="生气">😡</button>
+                                <button class="mood-btn" data-mood="fun" data-text="搞笑">😂</button>
+                                <button class="mood-btn" data-mood="kiss" data-text="亲亲">😘</button>
+                                <button class="mood-btn" data-mood="cool" data-text="酷酷">😎</button>
+                                <button class="mood-btn" data-mood="tired" data-text="疲惫">😴</button>
+                                <button class="mood-btn" data-mood="excited" data-text="兴奋">🤩</button>
+                                <button class="mood-btn" data-mood="thinking" data-text="思考">🤔</button>
+                                <button class="mood-btn" data-mood="shock" data-text="震惊">😮</button>
+                                <button class="mood-btn" data-mood="shy" data-text="害羞">😳</button>
+                                <button class="mood-btn" data-mood="cute" data-text="可爱">🥰</button>
+                                <button class="mood-btn" data-mood="cry" data-text="大哭">😭</button>
+                                <button class="mood-btn" data-mood="crazy" data-text="疯狂">🤪</button>
+                                <button class="mood-btn" data-mood="devil" data-text="调皮">😈</button>
+                                <button class="mood-btn" data-mood="angel" data-text="天使">😇</button>
+                                <button class="mood-btn" data-mood="party" data-text="开心">🥳</button>
+                                <button class="mood-btn" data-mood="sleep" data-text="困了">😪</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="interactive-zone">
+                <div class="zone-card">
+                    <div class="albums-section-title">
+                        <h3>相册</h3>
+                        <div class="albums-actions">
+                            <button class="albums-action-btn" title="创建相册" id="createAlbumBtn">+</button>
+                            <button class="albums-action-btn" title="刷新" id="refreshAlbums">🔄</button>
+                            <button class="albums-action-btn" title="排序" id="sortAlbums">↕️</button>
+                        </div>
+                    </div>
+                    <div class="albums-preview" id="albumsContainer">
+                        <!-- 相册内容由JS动态生成 -->
+                    </div>
+                </div>
+                <div class="zone-card">
+                    <h3>留言板</h3>
+                    <div class="messages-container" id="messagesContainer">
+                        <div class="no-messages" id="noMessagesPlaceholder">
+                            <i class="empty-icon">💬</i>
+                            <p>还没有留言，快来说点什么吧~</p>
+                        </div>
+                        <!-- 留言内容将通过JS动态添加 -->
+                    </div>
+                    <div class="message-board">
+                        <div class="message-controls">
+                            <textarea id="messageInput" placeholder="写下你想说的话..." class="auto-resize-textarea"></textarea>
+                            <div class="message-actions">
+                                <button id="sendMessage" class="send-btn">发送</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="timeline-section">
+                <h2>我们的时光轴</h2>
+                <div class="interactive-zone" style="height: auto; overflow: visible;">
+                    <div class="zone-card" style="width: 100%; height: auto; overflow: visible;">
+                        <div class="albums-section-title">
+                            <h3>时光记忆</h3>
+                            <div class="albums-actions">
+                                <button class="albums-action-btn" title="添加时光记忆" id="addTimelineEvent">+</button>
+                                <button class="albums-action-btn" title="刷新" id="refreshTimeline">🔄</button>
+                                <button class="albums-action-btn" title="排序" id="sortTimeline">↕️</button>
+                            </div>
+                        </div>
+                        <div class="timeline-container" id="timelineContainer" style="max-height: none; overflow: visible;">
+                            <!-- 时光轴内容由JS动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 20px; margin-bottom: 40px;">
+                <p>我们的爱情空间 &copy; 罗枭<span class="animated-heart" style="color: #ff0000; display: inline-block; animation: heartPulse 0.8s infinite; font-size: 20px; transform-origin: center; position: relative; top: 2px;">♥</span>赖姣姣</p>
+            </div>
+        </main>
+
+        <footer class="main-footer" style="display: none;">
+            <!-- 隐藏原页脚 -->
+        </footer>
+    </div>
+
+    <!-- 创建相册弹窗 -->
+    <div class="modal" id="createAlbumModal">
+        <div class="modal-content glass-effect">
+            <span class="close-btn" id="closeAlbumModal">&times;</span>
+            <div class="modal-header">
+                <h3>创建新相册</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="albumName">相册名称</label>
+                    <input type="text" id="albumName" placeholder="请输入相册名称..." required>
+                </div>
+                <div class="form-group">
+                    <label for="albumDescription">相册描述</label>
+                    <textarea id="albumDescription" placeholder="请输入相册描述..." rows="2"></textarea>
+                </div>
+                <div class="form-group cover-group" id="coverGroup">
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <i class="upload-icon">📷</i>
+                        <span>点击上传封面</span>
+                    </div>
+                    <div class="cover-preview" id="coverPreviewContainer" style="display: none;">
+                        <div class="preview-header">
+                            <span>相册封面</span>
+                            <button type="button" id="changeCoverBtn">更换</button>
+                        </div>
+                        <div class="preview-image">
+                            <img id="coverPreview" src="" alt="封面预览">
+                        </div>
+                    </div>
+                    <input type="file" id="coverUpload" accept="image/*" style="display: none;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelAlbumBtn" class="btn-cancel">取消</button>
+                <button id="createAlbumBtn" class="btn-primary">创建相册</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 创建时光记忆弹窗 -->
+    <div class="modal" id="createTimelineModal">
+        <div class="modal-content glass-effect">
+            <span class="close-btn" id="closeTimelineModal">&times;</span>
+            <div class="modal-header">
+                <h3>添加时光记忆</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="timelineTitle">记忆标题</label>
+                    <input type="text" id="timelineTitle" placeholder="请输入记忆标题..." required>
+                </div>
+                <div class="form-group">
+                    <label for="timelineDate">记忆日期</label>
+                    <input type="date" id="timelineDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="timelineContent">记忆内容</label>
+                    <textarea id="timelineContent" placeholder="请输入记忆内容..." rows="3"></textarea>
+                </div>
+                <div class="form-group timeline-image-group">
+                    <label>添加图片</label>
+                    <div id="uploadImageArea" class="upload-area">
+                        <div class="upload-placeholder" id="timelineImagePlaceholder">
+                            <i class="upload-icon">📷</i>
+                            <span>点击上传图片</span>
+                        </div>
+                        <div class="image-preview" id="timelineImagePreview" style="display: none;">
+                            <img id="previewImg" src="" alt="图片预览">
+                            <button type="button" id="changeImageBtn">更换</button>
+                            <button type="button" id="removeImageBtn" class="remove-btn">移除</button>
+                        </div>
+                        <input type="file" id="timelineImageUpload" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelTimelineBtn" class="btn-cancel">取消</button>
+                <button id="createTimelineBtn" class="btn-primary">保存记忆</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片查看器 -->
+    <div id="imageViewer" class="image-viewer">
+        <div class="image-viewer-content">
+            <span class="close-viewer">&times;</span>
+            <img id="viewerImage" src="" alt="查看图片">
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoomIn">+</button>
+                <button class="zoom-btn" id="zoomOut">-</button>
+                <button class="zoom-btn" id="resetZoom">重置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通用提示弹窗 -->
+    <div class="modal" id="alertModal">
+        <div class="modal-content glass-effect small-modal compact-modal">
+            <span class="close-btn" id="closeAlertModal">×</span>
+            <div class="modal-body text-center">
+                <div class="alert-icon">
+                    <i id="alertIcon">✅</i>
+                </div>
+                <h3 id="alertTitle">操作成功</h3>
+                <p id="alertMessage">操作已完成</p>
+            </div>
+            <div class="modal-footer justify-center">
+                <button class="btn-primary" id="alertConfirmBtn">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 时光记忆删除确认弹窗 -->
+    <div class="modal" id="confirmDeleteModal">
+        <div class="modal-content glass-effect small-modal compact-modal">
+            <span class="close-btn" id="closeConfirmDeleteModal">&times;</span>
+            <div class="modal-body text-center">
+                <div class="alert-icon warning">
+                    <i>⚠️</i>
+                </div>
+                <h3>删除确认</h3>
+                <p>确定要删除这条时光记忆吗？<br>此操作无法撤销。</p>
+            </div>
+            <div class="modal-footer justify-center">
+                <button class="btn-cancel" id="cancelDeleteBtn">取消</button>
+                <button class="btn-danger" id="confirmDeleteBtn">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 倒计时编辑弹窗 -->
+    <div class="modal" id="editCountdownModal">
+        <div class="modal-content glass-effect">
+            <span class="close-btn" id="closeCountdownModal">×</span>
+            <div class="modal-header">
+                <h2>编辑倒计时</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="countdownTitleInput">倒计时标题</label>
+                    <input type="text" id="countdownTitleInput" placeholder="输入倒计时标题...">
+                </div>
+                <div class="form-group">
+                    <label for="countdownDateInput">目标日期</label>
+                    <input type="date" id="countdownDateInput">
+                </div>
+                <div class="form-group">
+                    <label for="countdownDescriptionInput">描述文字</label>
+                    <input type="text" id="countdownDescriptionInput" placeholder="输入描述文字...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelCountdownBtn">取消</button>
+                <button class="btn-primary" id="saveCountdownBtn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除音乐确认弹窗 -->
+    <div id="confirmDeleteMusicModal">
+        <div class="modal-content">
+            <div class="delete-modal-body">
+                <p>确定删除此音乐？</p>
+                <div class="delete-modal-buttons">
+                    <button class="delete-btn-cancel" id="cancelDeleteMusicBtn">取消</button>
+                    <button class="delete-btn-confirm" id="confirmDeleteMusicBtn">删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/theme-switcher.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/flower-animation.js"></script>
+    <script src="js/musicPlayer.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/countdown.js"></script>
+    <script src="js/messageboard.js"></script>
+</body>
+</html> 
