@@ -8,6 +8,7 @@ const { uploadFile, deleteFile, listFiles } = require('../services/cos-service')
 // 确保临时上传目录存在
 const uploadDir = path.join(__dirname, '../../uploads');
 if (!fs.existsSync(uploadDir)) {
+  console.log('创建上传目录:', uploadDir);
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
@@ -21,11 +22,21 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 } // 限制10MB
+});
+
+// 测试路由
+router.get('/test', (req, res) => {
+  res.json({ success: true, message: '上传API正常工作' });
+});
 
 // 上传头像
 router.post('/avatar', upload.single('avatar'), async (req, res) => {
   try {
+    console.log('收到头像上传请求:', req.file);
+    
     if (!req.file) {
       return res.status(400).json({ success: false, message: '没有文件上传' });
     }
@@ -45,6 +56,8 @@ router.post('/avatar', upload.single('avatar'), async (req, res) => {
 // 上传相册封面
 router.post('/album-cover', upload.single('cover'), async (req, res) => {
   try {
+    console.log('收到相册封面上传请求:', req.file);
+    
     if (!req.file) {
       return res.status(400).json({ success: false, message: '没有文件上传' });
     }
@@ -64,6 +77,8 @@ router.post('/album-cover', upload.single('cover'), async (req, res) => {
 // 上传相册照片
 router.post('/photo', upload.single('photo'), async (req, res) => {
   try {
+    console.log('收到照片上传请求:', req.file, req.body);
+    
     if (!req.file) {
       return res.status(400).json({ success: false, message: '没有文件上传' });
     }
@@ -84,6 +99,8 @@ router.post('/photo', upload.single('photo'), async (req, res) => {
 // 上传时光轴图片
 router.post('/timeline', upload.single('image'), async (req, res) => {
   try {
+    console.log('收到时光轴图片上传请求:', req.file);
+    
     if (!req.file) {
       return res.status(400).json({ success: false, message: '没有文件上传' });
     }
@@ -104,6 +121,8 @@ router.post('/timeline', upload.single('image'), async (req, res) => {
 router.delete('/file', async (req, res) => {
   try {
     const { key } = req.body;
+    console.log('收到删除文件请求:', key);
+    
     if (!key) {
       return res.status(400).json({ success: false, message: '缺少文件key' });
     }
@@ -120,6 +139,8 @@ router.delete('/file', async (req, res) => {
 router.get('/files', async (req, res) => {
   try {
     const { prefix } = req.query;
+    console.log('收到获取文件列表请求:', prefix);
+    
     const files = await listFiles(prefix || '');
     res.json({
       success: true,

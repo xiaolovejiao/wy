@@ -1,10 +1,23 @@
 {
+  "name": "wy",
+  "version": "1.0.0",
+  "description": "情侣空间网站",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
-    "cos-js-sdk-v5": "^1.10.1",
-    "cos-nodejs-sdk-v5": "^2.16.0-beta.3",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "multer": "^2.0.1"
+    "cos-nodejs-sdk-v5": "^2.12.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
