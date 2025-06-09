@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>甜蜜空间 - 个人资料</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/themes.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/modal.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 音乐播放器样式 */
+        .music-player-icon {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .music-player-icon:hover {
+            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .music-player-icon i {
+            font-size: 20px;
+            color: white;
+            animation: musicNote 2s infinite;
+        }
+
+        @keyframes musicNote {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .music-player-modal {
+            position: fixed;
+            left: 20px;
+            top: 70px;
+            width: 350px;
+            max-height: 80vh;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 15px;
+            padding: 15px;
+            display: none;
+            z-index: 999;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .music-player-modal.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .music-player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .music-player-title {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .music-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+        }
+
+        .music-control-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+            opacity: 0.8;
+            transition: all 0.2s ease;
+        }
+
+        .music-control-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .music-progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin: 10px 0;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .music-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b8b, #ffd700);
+            border-radius: 2px;
+            width: 30%;
+            position: relative;
+        }
+
+        .music-progress-handle {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .music-info {
+            text-align: center;
+            margin: 10px 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .music-time {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .theme-cool .music-progress-bar {
+            background: linear-gradient(90deg, #ffd700, #ff6b8b);
+        }
+
+        .theme-starry .music-progress-bar {
+            background: linear-gradient(90deg, #4d9aff, #ff6b8b);
+        }
+
+        .music-list-section {
+            margin-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+        }
+        
+        .music-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .music-search-container {
+            flex: 1;
+            margin-right: 10px;
+        }
+        
+        #musicSearchInput {
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 15px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 12px;
+        }
+        
+        #musicSearchInput::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .music-add-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .music-add-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .music-list-container {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        .music-list-container::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .music-list-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+        
+        .music-list-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+        
+        .music-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .music-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .music-item.playing {
+            background: rgba(255, 107, 139, 0.2);
+            border-left: 3px solid #ff6b8b;
+        }
+        
+        .theme-cool .music-item.playing {
+            background: rgba(255, 215, 0, 0.2);
+            border-left: 3px solid #ffd700;
+        }
+        
+        .theme-starry .music-item.playing {
+            background: rgba(77, 154, 255, 0.2);
+            border-left: 3px solid #4d9aff;
+        }
+        
+        .music-item-title {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .music-item-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .music-action-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            font-size: 14px;
+            opacity: 0.8;
+            transition: all 0.2s ease;
+            padding: 2px;
+        }
+        
+        .music-action-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .empty-music-tip {
+            text-align: center;
+            padding: 20px 0;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body class="theme-starry">
+    <!-- 音乐播放器图标 -->
+    <div class="music-player-icon" id="musicPlayerIcon">
+        <i>🎵</i>
+    </div>
+
+    <!-- 音乐播放器模态框 -->
+    <div class="music-player-modal" id="musicPlayerModal">
+        <div class="music-player-header">
+            <div class="music-player-title">正在播放</div>
+            <button class="music-control-btn" id="closePlayerBtn">×</button>
+        </div>
+        <div class="music-info">
+            <div id="musicTitle">暂无播放</div>
+        </div>
+        <div class="music-controls">
+            <button class="music-control-btn" id="prevBtn" title="上一首">⏮</button>
+            <button class="music-control-btn" id="playPauseBtn" title="播放/暂停">▶</button>
+            <button class="music-control-btn" id="nextBtn" title="下一首">⏭</button>
+            <button class="music-control-btn" id="playModeBtn" title="播放模式">↕️</button>
+            <button class="music-control-btn" id="loopModeBtn" title="循环模式">➡️</button>
+        </div>
+        <div class="music-progress">
+            <div class="music-progress-bar">
+                <div class="music-progress-handle"></div>
+            </div>
+        </div>
+        <div class="music-time">
+            <span id="currentTime">0:00</span>
+            <span id="totalTime">0:00</span>
+        </div>
+        
+        <div class="music-list-section">
+            <div class="music-list-header">
+                <div class="music-search-container">
+                    <input type="text" id="musicSearchInput" placeholder="搜索音乐...">
+                </div>
+                <button class="music-add-btn" id="addMusicBtn" title="添加音乐">+</button>
+                <input type="file" id="musicFileInput" accept="audio/*" multiple style="display: none;">
+            </div>
+            <div class="music-list-container" id="musicListContainer">
+                <!-- 音乐列表将由JS动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <header class="main-header">
+            <div class="theme-switcher">
+                <button class="theme-toggle-btn" id="themeToggleBtn">
+                    <i>🎨</i>
+                </button>
+                <div class="theme-icons">
+                    <div class="theme-icon" data-theme="starry" title="星空梦幻风">
+                        <span class="theme-preview starry-preview"></span>
+                    </div>
+                    <div class="theme-icon" data-theme="cool" title="非主流酷炫浪漫风">
+                        <span class="theme-preview cool-preview"></span>
+                    </div>
+                    <div class="theme-icon" data-theme="pink" title="粉色系浪漫风">
+                        <span class="theme-preview pink-preview"></span>
+                    </div>
+                </div>
+            </div>
+            <a href="home.html" class="back-button">🔙</a>
+        </header>
+
+        <main class="profile-content">
+            <div class="profile-top-section">
+                <!-- 用户信息卡片 -->
+                <section class="profile-card glass-effect">
+                    <div class="profile-card-content">
+                        <div class="profile-info-container">
+                            <!-- 头像和名字区域 -->
+                            <div class="profile-header-section">
+                                <div class="profile-avatar-wrapper">
+                                    <div class="profile-avatar-container">
+                                        <img src="images/default-avatar.png" alt="个人头像" id="profileAvatar" style="cursor: pointer;">
+                                        <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="profile-name-section">
+                                        <h1 id="profileName" class="editable" title="点击修改">罗枭</h1>
+                                        <p id="profileMotto" class="profile-motto editable" title="点击编辑个性签名">快乐来自于努力与勤奋</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 详细信息区域 -->
+                            <div class="profile-details">
+                                <!-- 生日和生肖信息 -->
+                                <div class="info-grid">
+                                    <!-- 左侧生日信息 -->
+                                    <div class="info-column">
+                                        <div class="birthday-info">
+                                            <div class="birthday-line">国历：<span id="birthday" class="editable" title="点击修改">1997-01-29</span></div>
+                                            <div class="birthday-line">农历：<span id="lunarBirthday" class="editable" title="点击修改">1996-12-21</span></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 右侧生肖和星座 -->
+                                    <div class="info-column">
+                                        <div class="zodiac-info">
+                                            <div class="info-row">
+                                                <div class="info-label">生肖：</div>
+                                                <span id="chineseZodiac" class="editable" title="点击修改">子鼠</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <div class="info-label">星座：</div>
+                                                <span id="zodiac" class="editable" title="点击修改">天秤座</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 爱情宣言 -->
+                                <div class="declaration-row">
+                                    <p id="loveDeclaration" class="editable" title="点击修改">爱情宣言（点击可编辑）</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 今日心愿墙 -->
+                <section class="wish-wall-card glass-effect">
+                    <h2>今日心愿墙</h2>
+                    <div class="wish-list">
+                        <div class="wish-input-container">
+                            <textarea id="newWish" placeholder="写下你今天的心愿..." maxlength="100"></textarea>
+                            <button id="addWish" class="btn-create">发布</button>
+                        </div>
+                        <div id="wishList" class="wishes-container">
+                            <!-- 心愿将通过JavaScript动态添加 -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 相册卡片 -->
+            <section class="albums-card glass-effect">
+                <div class="section-header">
+                    <h2>我的相册</h2>
+                    <button id="createAlbum" class="btn-create">创建相册</button>
+                </div>
+                <div class="albums-grid" id="albumsContainer">
+                    <div class="album-item add-album">
+                        <div class="album-add-icon">+</div>
+                        <p>添加相册</p>
+                    </div>
+                    <!-- 相册列表将通过 JavaScript 动态添加 -->
+                </div>
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <div style="text-align: center; margin-top: 20px; margin-bottom: 40px;">
+                <p>我们的爱情空间 &copy; 罗枭<span class="animated-heart" style="color: #ff0000; display: inline-block; animation: heartPulse 0.8s infinite; font-size: 20px; transform-origin: center; position: relative; top: 2px;">♥</span>赖姣姣</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- 创建相册弹窗 -->
+    <div class="modal" id="createAlbumModal">
+        <div class="modal-content glass-effect">
+            <span class="close-btn" id="closeAlbumModal">&times;</span>
+            <div class="modal-header">
+                <h3>创建相册</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="albumName">相册名称</label>
+                    <input type="text" id="albumName" placeholder="请输入相册名称..." required>
+                </div>
+                <div class="form-group">
+                    <label for="albumDescription">相册描述</label>
+                    <textarea id="albumDescription" placeholder="请输入相册描述..." rows="3"></textarea>
+                </div>
+                <div class="form-group" id="coverGroup">
+                    <label>相册封面</label>
+                    <div class="upload-area">
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <i class="upload-icon">📷</i>
+                            <span>点击上传封面</span>
+                        </div>
+                        <div class="cover-preview" id="coverPreviewContainer" style="display: none;">
+                            <img id="coverPreview" src="" alt="封面预览">
+                            <button type="button" id="changeCoverBtn">更换</button>
+                        </div>
+                        <input type="file" id="coverUpload" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 15px 20px; display: flex; justify-content: center;">
+                <button type="button" class="btn-primary" style="min-width: 120px;">创建</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 提示弹窗 -->
+    <div class="modal" id="alertModal">
+        <div class="modal-content glass-effect">
+            <span class="close-btn" id="closeAlertModal">&times;</span>
+            <div class="modal-body">
+                <div class="alert-icon" id="alertIcon">✅</div>
+                <h3 id="alertTitle">成功</h3>
+                <p id="alertMessage">操作已完成</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" id="alertConfirmBtn">确定</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/theme-switcher.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/musicPlayer.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html> 

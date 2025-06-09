@@ -1,0 +1,576 @@
+/* 浪漫可爱风主题 */
+.theme-romantic {
+    --primary-color: #ff69b4;
+    --secondary-color: #ffb6c1;
+    --text-color: #4a4a4a;
+    --bg-color: #fff5f7;
+    --accent-color: #ff1493;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.theme-romantic .btn-create,
+.theme-romantic .btn-setting,
+.theme-romantic .btn-submit,
+.theme-romantic .btn-login {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.theme-romantic .btn-cancel {
+    background-color: #f0f0f0;
+    color: var(--text-color);
+}
+
+.theme-romantic .main-header {
+    box-shadow: none;
+}
+
+.theme-romantic .login-box {
+    background-color: white;
+    border: 2px solid var(--secondary-color);
+}
+
+/* 星空梦幻风主题 */
+.theme-starry {
+    background: linear-gradient(to bottom, #0a192f, #20314f);
+    color: #e1e6f0;
+    position: relative;
+}
+
+.theme-starry::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(77, 154, 255, 0.1) 0%, transparent 25%),
+        radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 25%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.theme-starry::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: radial-gradient(
+        circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(77, 154, 255, 0.4) 0%,
+        rgba(77, 154, 255, 0.2) 15%,
+        rgba(77, 154, 255, 0.1) 30%,
+        transparent 60%
+    );
+    z-index: 0;
+    mix-blend-mode: screen;
+    transition: background 0.15s ease;
+}
+
+.theme-starry .login-box {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+                inset 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.theme-starry .btn-login {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-starry .btn-login:hover {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+.theme-starry .heart-shape {
+    fill: #4d9aff;
+    filter: drop-shadow(0 0 5px rgba(77, 154, 255, 0.7));
+}
+
+.theme-starry .main-header {
+    background: transparent;
+}
+
+/* 非主流酷炫浪漫风主题 */
+.theme-cool {
+    background: linear-gradient(125deg, #2d0a4e, #6b0f8f, #2d0a4e);
+    color: #ffd4ff;
+    background-size: 400% 400%;
+    animation: coolGradient 15s ease infinite;
+    position: relative;
+}
+
+/* 非主流主题增强元素 */
+.theme-cool::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 0, 255, 0.2) 0%, transparent 25%),
+        radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.2) 0%, transparent 25%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.theme-cool::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(45deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.05) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.05) 75%);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.3;
+    animation: movePattern 30s linear infinite;
+}
+
+@keyframes coolGradient {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+}
+
+.theme-cool .btn-create,
+.theme-cool .btn-setting,
+.theme-cool .btn-submit,
+.theme-cool .btn-login {
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: 1px solid var(--accent-color);
+}
+
+.theme-cool .btn-cancel {
+    background-color: #333;
+    color: var(--text-color);
+    border: 1px solid var(--accent-color);
+}
+
+.theme-cool .main-header {
+    background: transparent;
+}
+
+.theme-cool .login-box {
+    background: rgba(74, 7, 105, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    box-shadow: 0 8px 32px rgba(138, 43, 226, 0.3),
+                inset 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.theme-cool .btn-login {
+    background: linear-gradient(45deg, rgba(138, 43, 226, 0.6), rgba(75, 0, 130, 0.6));
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.theme-cool .btn-login:hover {
+    background: linear-gradient(45deg, rgba(138, 43, 226, 0.8), rgba(75, 0, 130, 0.8));
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+}
+
+.theme-cool .heart-shape {
+    fill: #c27eff;
+    filter: drop-shadow(0 0 8px #c27eff);
+    animation: neonPulse 1.5s ease-in-out infinite alternate;
+}
+
+/* 粉金色浪漫风主题 (替换原粉色主题) */
+.theme-pink {
+    background: linear-gradient(135deg, #ffe6eb 0%, #fff9f0 100%);
+    color: #4a4a4a;
+    position: relative;
+}
+
+.theme-pink::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: radial-gradient(
+        circle at var(--mouse-x) var(--mouse-y),
+        rgba(255, 182, 193, 0.2) 0%,
+        rgba(255, 215, 0, 0.1) 30%,
+        transparent 60%
+    );
+    z-index: 0;
+    mix-blend-mode: soft-light;
+    transition: all 0.3s ease;
+}
+
+/* 粉金色主题增强元素 */
+.theme-pink::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(255, 182, 193, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.theme-pink .btn-create,
+.theme-pink .btn-setting,
+.theme-pink .btn-submit,
+.theme-pink .btn-login {
+    background-color: var(--accent-color);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+}
+
+.theme-pink .btn-cancel {
+    background-color: #ffd1dc;
+    color: var(--text-color);
+}
+
+.theme-pink .main-header {
+    background: transparent;
+}
+
+.theme-pink .login-box {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 228, 225, 0.6) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 182, 193, 0.6);
+    box-shadow: 0 8px 32px rgba(255, 182, 193, 0.3),
+                inset 0 0 5px rgba(255, 215, 0, 0.3);
+}
+
+.theme-pink .btn-login {
+    background: linear-gradient(45deg, #ffb6c1, #ffd700);
+    color: #4a4a4a;
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.theme-pink .btn-login:hover {
+    background: linear-gradient(45deg, #ffb6c1, #ffd700);
+    box-shadow: 0 6px 20px rgba(255, 182, 193, 0.6);
+    transform: translateY(-2px);
+}
+
+.theme-pink .heart-shape {
+    fill: #ff6b8b;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+}
+
+/* 主题切换动画 */
+body {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.btn-create,
+.btn-setting,
+.btn-submit,
+.btn-login,
+.btn-cancel {
+    transition: all 0.3s ease;
+}
+
+/* 主题特定动画效果 */
+.theme-starry .heart-icon {
+    color: #ffffff;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+}
+
+.theme-cool .heart-icon {
+    color: #c27eff;
+    text-shadow: 0 0 10px #c27eff;
+    animation: neonHeartbeat 1.5s infinite;
+}
+
+@keyframes neonHeartbeat {
+    0% { transform: scale(1); filter: drop-shadow(0 0 5px #c27eff); }
+    50% { transform: scale(1.2); filter: drop-shadow(0 0 10px #c27eff); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 5px #c27eff); }
+}
+
+.theme-pink .heart-icon {
+    color: #ff6b8b;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+}
+
+/* 粉金色主题登录框内部样式 */
+.theme-pink .login-box .login-header h1 {
+    color: #d23369;
+}
+
+.theme-pink .login-box .login-subtitle {
+    color: #8a4a7d;
+}
+
+.theme-pink .login-box label {
+    color: #8a4a7d;
+    font-weight: 500;
+}
+
+.theme-pink .login-box input {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 182, 193, 0.5);
+    color: #4a4a4a;
+}
+
+.theme-pink .login-box input::placeholder {
+    color: rgba(138, 74, 125, 0.6);
+}
+
+.theme-pink .login-box .forgot-password {
+    color: #8a4a7d;
+}
+
+/* 粉金色主题登录框装饰 */
+.theme-pink .login-box {
+    position: relative;
+}
+
+.theme-pink .login-box::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: inherit;
+    background: linear-gradient(45deg, 
+        rgba(255, 215, 0, 0.3),
+        rgba(255, 182, 193, 0.3) 30%,
+        rgba(255, 215, 0, 0.3) 70%,
+        rgba(255, 182, 193, 0.3)
+    );
+    z-index: -1;
+    animation: borderGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes borderGlow {
+    0% {
+        filter: blur(3px) brightness(1);
+    }
+    100% {
+        filter: blur(3px) brightness(1.2);
+    }
+}
+
+/* 主题特定的退出登录按钮样式 */
+.theme-starry #logoutBtn {
+    background: rgba(77, 154, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e1e6f0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.theme-starry #logoutBtn:hover {
+    background: rgba(77, 154, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.theme-cool #logoutBtn {
+    background: rgba(138, 43, 226, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffd4ff;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.theme-cool #logoutBtn:hover {
+    background: rgba(138, 43, 226, 0.5);
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+    transform: translateY(-2px);
+}
+
+.theme-pink #logoutBtn {
+    background: linear-gradient(45deg, rgba(255, 182, 193, 0.5), rgba(255, 215, 0, 0.3));
+    border: 1px solid rgba(255, 182, 193, 0.3);
+    color: #8a4a7d;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.theme-pink #logoutBtn:hover {
+    background: linear-gradient(45deg, rgba(255, 182, 193, 0.7), rgba(255, 215, 0, 0.5));
+    transform: translateY(-2px);
+}
+
+/* Home页面主题特定样式 */
+
+/* 星空梦幻风主题 */
+.theme-starry .home-content h2,
+.theme-starry .home-content h3 {
+    color: #8fb8ff;
+    text-shadow: 0 0 10px rgba(77, 154, 255, 0.5);
+}
+
+.theme-starry .avatar-card {
+    background: rgba(10, 25, 47, 0.4);
+    border: 1px solid rgba(77, 154, 255, 0.3);
+}
+
+.theme-starry .dashboard-card,
+.theme-starry .zone-card,
+.theme-starry .add-memory {
+    background: rgba(10, 25, 47, 0.4);
+    border: 1px solid rgba(77, 154, 255, 0.2);
+}
+
+.theme-starry .heart-icon {
+    color: #4d9aff;
+    text-shadow: 0 0 10px rgba(77, 154, 255, 0.7);
+}
+
+.theme-starry .send-btn,
+.theme-starry .add-btn {
+    background: rgba(77, 154, 255, 0.2);
+    border: 1px solid rgba(77, 154, 255, 0.3);
+}
+
+.theme-starry .send-btn:hover,
+.theme-starry .add-btn:hover {
+    background: rgba(77, 154, 255, 0.3);
+}
+
+.theme-starry .mood-btn {
+    background: rgba(10, 25, 47, 0.5);
+}
+
+.theme-starry .mood-btn:hover {
+    background: rgba(77, 154, 255, 0.2);
+}
+
+/* 非主流酷炫浪漫风主题 */
+.theme-cool .home-content h2,
+.theme-cool .home-content h3 {
+    color: #c27eff;
+    text-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+}
+
+.theme-cool .avatar-card {
+    background: rgba(45, 10, 78, 0.4);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    box-shadow: 0 5px 20px rgba(138, 43, 226, 0.2);
+}
+
+.theme-cool .dashboard-card,
+.theme-cool .zone-card,
+.theme-cool .add-memory {
+    background: rgba(45, 10, 78, 0.4);
+    border: 1px solid rgba(138, 43, 226, 0.2);
+    box-shadow: 0 5px 20px rgba(138, 43, 226, 0.2);
+}
+
+.theme-cool .heart-icon {
+    color: #c27eff;
+    text-shadow: 0 0 15px rgba(138, 43, 226, 0.8);
+    animation: neonHeartbeat 1.5s infinite;
+}
+
+.theme-cool .send-btn,
+.theme-cool .add-btn {
+    background: linear-gradient(45deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+}
+
+.theme-cool .send-btn:hover,
+.theme-cool .add-btn:hover {
+    background: linear-gradient(45deg, rgba(138, 43, 226, 0.4), rgba(75, 0, 130, 0.4));
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+}
+
+.theme-cool .mood-btn {
+    background: rgba(45, 10, 78, 0.5);
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
+}
+
+.theme-cool .mood-btn:hover {
+    background: rgba(138, 43, 226, 0.3);
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+}
+/* 粉金色浪漫风主题 */
+.theme-pink .home-content h2,
+.theme-pink .home-content h3 {
+    color: #d23369;
+    text-shadow: 0 0 10px rgba(255, 182, 193, 0.4);
+}
+
+.theme-pink .avatar-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 228, 225, 0.3) 100%);
+    border: 1px solid rgba(255, 182, 193, 0.3);
+}
+
+.theme-pink .dashboard-card,
+.theme-pink .zone-card,
+.theme-pink .add-memory {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 228, 225, 0.3) 100%);
+    border: 1px solid rgba(255, 182, 193, 0.3);
+}
+
+.theme-pink .heart-icon {
+    color: #ff6b8b;
+    text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+    background: linear-gradient(45deg, #ff6b8b, #ffd700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4));
+}
+
+.theme-pink .send-btn,
+.theme-pink .add-btn {
+    background: linear-gradient(45deg, rgba(255, 182, 193, 0.5), rgba(255, 215, 0, 0.3));
+    border: 1px solid rgba(255, 182, 193, 0.3);
+}
+
+.theme-pink .send-btn:hover,
+.theme-pink .add-btn:hover {
+    background: linear-gradient(45deg, rgba(255, 182, 193, 0.7), rgba(255, 215, 0, 0.5));
+}
+
+.theme-pink .mood-btn {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 228, 225, 0.3) 100%);
+    border: 1px solid rgba(255, 182, 193, 0.2);
+}
+
+.theme-pink .mood-btn:hover {
+    background: linear-gradient(45deg, rgba(255, 182, 193, 0.4), rgba(255, 215, 0, 0.2));
+    border: 1px solid rgba(255, 182, 193, 0.3);
+} 

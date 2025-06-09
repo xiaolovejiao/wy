@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>甜蜜空间 - 登录</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/themes.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/modal.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="theme-starry">
+    <!-- 动态背景容器会由JavaScript自动创建 -->
+    <div class="page-container">
+        <div class="theme-switcher login-theme-switcher">
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <i>🎨</i>
+            </button>
+            <div class="theme-icons">
+                <div class="theme-icon" data-theme="starry" title="星空梦幻风">
+                    <span class="theme-preview starry-preview"></span>
+                </div>
+                <div class="theme-icon" data-theme="cool" title="非主流酷炫浪漫风">
+                    <span class="theme-preview cool-preview"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-container">
+            <div class="login-box glass-effect">
+                <div class="login-header">
+                    <h1>甜蜜空间</h1>
+                    <p class="login-subtitle">欢迎回到我们的幸福空间</p>
+                </div>
+                
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="username">用户名</label>
+                        <input type="text" id="username" name="username" required placeholder="请输入用户名">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" name="password" required placeholder="请输入密码">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn-login glass-btn">登录</button>
+                    </div>
+                    
+                    <div class="form-footer">
+                        <a href="forgot-password.html" class="forgot-password">忘记密码？</a>
+                    </div>
+                </form>
+                
+                <!-- 浪漫动画效果 -->
+                <div class="romantic-animation">
+                    <div class="floating-hearts">
+                        <div class="heart heart1">❤</div>
+                        <div class="heart heart2">❤</div>
+                        <div class="heart heart3">❤</div>
+                        <div class="heart heart4">❤</div>
+                        <div class="heart heart5">❤</div>
+                        <div class="heart heart6" style="left: 20%; animation-delay: 3.2s;">❤</div>
+                        <div class="heart heart7" style="left: 40%; animation-delay: 2.7s;">❤</div>
+                        <div class="heart heart8" style="left: 60%; animation-delay: 1.9s;">❤</div>
+                        <div class="heart heart9" style="left: 80%; animation-delay: 3.5s;">❤</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 错误提示弹窗 -->
+        <div id="errorModal" class="modal">
+            <div class="modal-content glass-effect small-modal">
+                <span class="close-btn">&times;</span>
+                <div class="modal-body">
+                    <div class="modal-icon error-icon" id="modalIcon">
+                        <i class="icon-error" id="modalIconSymbol">!</i>
+                    </div>
+                    <h3 id="modalTitle">登录失败</h3>
+                    <p id="errorMessage">用户名或密码错误！请重新输入。</p>
+                    <button class="modal-btn" id="modalBtn">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/theme-switcher.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/flower-animation.js"></script>
+    <script src="js/login.js"></script>
+    
+    <!-- 内联主题切换脚本 -->
+    <script>
+        // 确保DOM加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const themeBtn = document.getElementById('themeToggleBtn');
+            const themeMenu = document.querySelector('.theme-icons');
+            const themeOptions = document.querySelectorAll('.theme-icon');
+            
+            // 点击主题按钮切换菜单显示状态
+            if (themeBtn) {
+                themeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    // 如果菜单已显示，先移除动画类再隐藏
+                    if (themeMenu.classList.contains('show')) {
+                        themeMenu.classList.remove('show');
+                    } else {
+                        // 否则显示菜单
+                        themeMenu.classList.add('show');
+                    }
+                });
+            }
+            
+            // 点击页面其他区域关闭菜单
+            document.addEventListener('click', function() {
+                themeMenu.classList.remove('show');
+            });
+            
+            // 阻止点击菜单时关闭菜单
+            themeMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            // 点击主题选项切换主题
+            themeOptions.forEach(function(option) {
+                option.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    document.body.className = 'theme-' + theme;
+                    localStorage.setItem('theme', theme);
+                    
+                    // 更新激活状态
+                    themeOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 关闭菜单
+                    themeMenu.classList.remove('show');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

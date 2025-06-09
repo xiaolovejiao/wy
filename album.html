@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>相册详情 - 甜蜜空间</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/themes.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/album.css">
+    <link rel="stylesheet" href="styles/modal.css">
+    <link rel="stylesheet" href="styles/custom.css">
+</head>
+<body class="theme-starry">
+    <div class="page-container">
+        <header class="main-header">
+            <a href="javascript:history.back()" class="back-button">🔙</a>
+            <div class="theme-switcher">
+                <button class="theme-toggle-btn" id="themeToggleBtn">
+                    <i>🎨</i>
+                </button>
+                <div class="theme-icons">
+                    <div class="theme-icon" data-theme="starry" title="星空梦幻风">
+                        <span class="theme-preview starry-preview"></span>
+                    </div>
+                    <div class="theme-icon" data-theme="cool" title="非主流酷炫浪漫风">
+                        <span class="theme-preview cool-preview"></span>
+                    </div>
+                    <div class="theme-icon" data-theme="pink" title="粉色系浪漫风">
+                        <span class="theme-preview pink-preview"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 音乐播放器图标 -->
+            <div class="music-player-icon" id="musicPlayerIcon">
+                <i>🎵</i>
+            </div>
+        </header>
+
+        <main class="album-content">
+            <section class="album-header glass-effect">
+                <div class="album-header-content">
+                    <div class="album-cover-thumbnail">
+                        <img id="albumCoverThumb" src="" alt="相册封面">
+                    </div>
+                    <div class="album-title-info">
+                        <h1 id="albumTitle">相册名称</h1>
+                        <p id="albumStats">0 张照片</p>
+                    </div>
+                </div>
+                <div class="album-actions">
+                    <button class="btn-edit" id="editAlbumBtn">编辑相册</button>
+                </div>
+            </section>
+
+            <section class="photos-container glass-effect">
+                <div class="photos-header">
+                    <div class="photos-actions">
+                        <button class="btn-batch-manage" id="batchManageBtn">
+                            <i>🗑️</i> 批量管理
+                        </button>
+                        <button class="btn-exit-manage" id="exitManageBtn" style="display: none;">
+                            <i>✖️</i> 退出管理
+                        </button>
+                    </div>
+                </div>
+                <div class="photos-grid" id="photosGrid">
+                    <!-- 照片内容将由JS动态生成 -->
+                </div>
+            </section>
+
+            <!-- 添加照片的模态框 -->
+            <div class="modal" id="addPhotoModal">
+                <div class="modal-content glass-effect">
+                    <span class="close-btn" id="closeAddPhotoModal">×</span>
+                    <h2>添加照片</h2>
+                    <form id="addPhotoForm">
+                        <div class="form-group">
+                            <label for="photoTitle">照片标题 (可选)</label>
+                            <input type="text" id="photoTitle" placeholder="输入照片标题...">
+                        </div>
+                        <div class="form-group">
+                            <label for="photoDescription">照片描述 (可选)</label>
+                            <textarea id="photoDescription" placeholder="描述这张照片的故事..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="photoDate">照片日期</label>
+                            <input type="date" id="photoDate">
+                        </div>
+                        <div class="form-group">
+                            <label>选择照片</label>
+                            <div class="photo-upload-container">
+                                <div class="photo-preview" id="photoPreview">
+                                    <i class="upload-icon">📷</i>
+                                    <span>点击选择照片</span>
+                                </div>
+                                <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-submit" id="submitAddPhoto">添加</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 查看照片的模态框 -->
+            <div class="modal" id="viewPhotoModal">
+                <div class="modal-content glass-effect full-screen-modal">
+                    <span class="close-btn" id="closeViewPhotoModal">×</span>
+                    <div class="photo-navigation">
+                        <button class="nav-btn prev-btn" id="prevPhotoBtn">❮</button>
+                        <button class="nav-btn next-btn" id="nextPhotoBtn">❯</button>
+                    </div>
+                    <div class="photo-view-container">
+                        <div class="photo-viewer">
+                            <img id="viewPhotoImg" src="" alt="照片预览">
+                        </div>
+                        <div class="zoom-controls">
+                            <button class="zoom-btn" id="zoomInBtn">+</button>
+                            <button class="zoom-btn" id="zoomOutBtn">−</button>
+                            <button class="zoom-btn" id="resetZoomBtn">重置</button>
+                        </div>
+                        <div class="photo-details">
+                            <h2 id="viewPhotoTitle">照片标题</h2>
+                            <p id="viewPhotoDate">拍摄日期</p>
+                            <p id="viewPhotoDescription">照片描述</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 边界提示弹窗 -->
+            <div class="toast-message" id="boundaryToast">
+                <div class="toast-content">
+                    <span id="toastMessage">已经是第一张照片了</span>
+                </div>
+            </div>
+
+            <!-- 编辑相册的模态框 -->
+            <div class="modal" id="editAlbumModal">
+                <div class="modal-content glass-effect">
+                    <span class="close-btn" id="closeEditAlbumModal">×</span>
+                    <div class="modal-header">
+                        <h2>编辑相册</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="edit-album-options">
+                            <button class="edit-album-option" id="renameAlbumBtn">
+                                <i>✏️</i>
+                                <span>重命名相册</span>
+                            </button>
+                            <button class="edit-album-option" id="changeCoverBtn">
+                                <i>🖼️</i>
+                                <span>更换封面</span>
+                            </button>
+                            <button class="edit-album-option" id="editDescriptionBtn">
+                                <i>📝</i>
+                                <span>修改描述</span>
+                            </button>
+                            <button class="edit-album-option danger" id="deleteAlbumBtn">
+                                <i>🗑️</i>
+                                <span>删除相册</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel btn-full-width" id="cancelEditAlbum">关闭</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 重命名相册弹窗 -->
+            <div class="modal" id="renameAlbumModal">
+                <div class="modal-content glass-effect">
+                    <span class="close-btn" id="closeRenameModal">×</span>
+                    <div class="modal-header">
+                        <h2>重命名相册</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="newAlbumName">新名称</label>
+                            <input type="text" id="newAlbumName" placeholder="请输入新的相册名称...">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" id="cancelRename">取消</button>
+                        <button class="btn-primary" id="confirmRename">确认</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 更换封面弹窗 -->
+            <div class="modal" id="changeCoverModal">
+                <div class="modal-content glass-effect">
+                    <span class="close-btn" id="closeChangeCoverModal">×</span>
+                    <div class="modal-header">
+                        <h2>更换相册封面</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>上传新封面</label>
+                            <div class="cover-upload-container">
+                                <div class="cover-preview" id="newCoverPreview">
+                                    <div id="uploadPlaceholder" class="upload-placeholder">
+                                        <i class="upload-icon">🖼️</i>
+                                        <span>点击选择图片</span>
+                                    </div>
+                                    <div id="coverPreviewContainer" class="cover-preview" style="display: none;">
+                                        <div class="preview-header">
+                                            <span>相册封面</span>
+                                            <button id="changeCoverBtnInner">更换</button>
+                                        </div>
+                                        <div class="preview-image">
+                                            <img id="coverPreviewImg" src="" alt="封面预览">
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="file" id="newCoverInput" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>或从相册中选择照片作为封面</label>
+                            <div class="album-photos-grid" id="coverSelectionGrid">
+                                <!-- 这里会动态加载相册照片 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" id="cancelChangeCover">取消</button>
+                        <button class="btn-primary" id="confirmChangeCover">确认</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 编辑相册描述弹窗 -->
+            <div class="modal" id="editDescriptionModal">
+                <div class="modal-content glass-effect">
+                    <span class="close-btn" id="closeDescriptionModal">×</span>
+                    <div class="modal-header">
+                        <h2>修改相册描述</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="albumDescription">相册描述</label>
+                            <textarea id="albumDescription" placeholder="描述这个相册的故事..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" id="cancelDescription">取消</button>
+                        <button class="btn-primary" id="confirmDescription">确认</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 删除相册确认弹窗 -->
+            <div class="modal" id="deleteAlbumModal">
+                <div class="modal-content glass-effect compact-modal">
+                    <span class="close-btn" id="closeDeleteModal">×</span>
+                    <div class="modal-header">
+                        <h2>删除相册</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="confirm-message">
+                            <i>⚠️</i>
+                            <p>确定要删除这个相册吗？此操作不可恢复，相册中的所有照片都将被删除。</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer delete-actions">
+                        <button class="btn-cancel" id="cancelDelete">取消</button>
+                        <button class="btn-danger-new" id="confirmDelete">删除</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 通用提示弹窗 -->
+            <div class="modal" id="alertModal">
+                <div class="modal-content glass-effect small-modal">
+                    <span class="close-btn" id="closeAlertModal">×</span>
+                    <div class="modal-body text-center">
+                        <div class="alert-icon">
+                            <i id="alertIcon">✅</i>
+                        </div>
+                        <h3 id="alertTitle">操作成功</h3>
+                        <p id="alertMessage">操作已完成</p>
+                    </div>
+                    <div class="modal-footer justify-center">
+                        <button class="btn-primary" id="alertConfirmBtn">确定</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="main-footer">
+            <div style="text-align: center; margin-top: 20px; margin-bottom: 40px;">
+                <p>我们的爱情空间 &copy; 罗枭<span class="animated-heart" style="color: #ff0000; display: inline-block; animation: heartPulse 0.8s infinite; font-size: 20px; transform-origin: center; position: relative; top: 2px;">♥</span>赖姣姣</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- 音乐播放器模态框 -->
+    <div class="music-player-modal" id="musicPlayerModal">
+        <div class="music-player-header">
+            <div class="music-player-title">音乐播放器</div>
+            <button class="music-control-btn" id="closePlayerBtn">×</button>
+        </div>
+        <div class="music-info">
+            <div id="musicTitle">不想再见面</div>
+        </div>
+        <div class="music-controls">
+            <button class="music-control-btn" id="prevBtn" title="上一首">⏮</button>
+            <button class="music-control-btn" id="playPauseBtn" title="播放/暂停">⏸</button>
+            <button class="music-control-btn" id="nextBtn" title="下一首">⏭</button>
+            <button class="music-control-btn" id="playModeBtn" title="播放模式">🔀</button>
+            <button class="music-control-btn" id="loopModeBtn" title="循环模式">🔁</button>
+            <div class="volume-control">
+                <button class="music-control-btn" id="volumeBtn" title="音量">🔊</button>
+                <div class="volume-slider-container" id="volumeContainer">
+                    <input type="range" min="0" max="100" value="80" class="volume-slider" id="volumeSlider">
+                </div>
+            </div>
+        </div>
+        <div class="music-progress">
+            <div class="music-progress-bar"></div>
+        </div>
+        <div class="music-time">
+            <span id="currentTime">0:24</span>
+            <span id="totalTime">4:41</span>
+        </div>
+        <div class="music-list-section">
+            <div class="music-list-header">
+                <div class="music-list-title">播放列表</div>
+                <span id="songCount">共 175 首歌曲</span>
+                <div class="music-list-actions">
+                    <button class="music-refresh-btn" id="refreshMusicBtn" title="刷新列表">🔄</button>
+                    <button class="music-add-btn" id="addMusicBtn" title="添加音乐">➕</button>
+                    <input type="file" id="musicFileInput" accept="audio/*" multiple style="display: none;">
+                </div>
+            </div>
+            <div class="music-search">
+                <input type="text" id="musicSearchInput" placeholder="搜索音乐...">
+            </div>
+            <div class="music-list" id="musicListContainer">
+                <!-- 音乐列表将由JS动态生成 -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- 删除音乐确认弹窗 -->
+    <div id="confirmDeleteMusicModal">
+        <div class="modal-content">
+            <div class="delete-modal-body">
+                <p>确定删除此音乐？</p>
+                <div class="delete-modal-buttons">
+                    <button class="delete-btn-cancel" id="cancelDeleteMusicBtn">取消</button>
+                    <button class="delete-btn-confirm" id="confirmDeleteMusicBtn">删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/theme-switcher.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/album.js"></script>
+    <script src="js/musicPlayer.js"></script>
+</body>
+</html>
+
+<style>
+    /* 增强版照片查看器样式 */
+    .full-screen-modal {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        margin: 0;
+        padding: 20px;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+    }
+    
+    .photo-view-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        position: relative;
+    }
+    
+    .photo-viewer {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .photo-viewer img {
+        max-height: 80vh;
+        max-width: 90%;
+        object-fit: contain;
+        transform-origin: center;
+        transition: transform 0.3s ease;
+        cursor: move;
+    }
+    
+    .photo-navigation {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    .nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.3);
+        color: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        pointer-events: auto;
+    }
+    
+    .nav-btn:hover {
+        background: rgba(0, 0, 0, 0.6);
+    }
+    
+    .prev-btn {
+        left: 20px;
+    }
+    
+    .next-btn {
+        right: 20px;
+    }
+    
+    .zoom-controls {
+        display: flex;
+        gap: 10px;
+        margin: 15px 0;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 8px 15px;
+        border-radius: 30px;
+    }
+    
+    .zoom-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .zoom-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .photo-details {
+        width: 100%;
+        max-width: 800px;
+        padding: 15px 20px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        margin-top: 20px;
+        color: white;
+    }
+    
+    .photo-details h2 {
+        margin: 0 0 10px 0;
+    }
+    
+    .photo-details p {
+        margin: 5px 0;
+        opacity: 0.8;
+    }
+    
+    /* 边界提示样式 */
+    .toast-message {
+        position: fixed;
+        top: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 30px;
+        z-index: 10000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .toast-message.show {
+        opacity: 1;
+    }
+    
+    .toast-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* 音乐播放器样式 */
+    .music-player-icon {
+        position: fixed;
+        bottom: auto;
+        right: auto;
+        top: 20px;
+        left: 20px;
+        width: 36px;
+        height: 36px;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 100;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .music-player-icon:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    
+    .music-player-icon i {
+        font-size: 18px;
+        color: white;
+    }
+    
+    /* 音乐播放器模态框 */
+    .music-player-modal {
+        position: fixed;
+        bottom: auto;
+        right: auto;
+        top: 65px;
+        left: 20px;
+        width: 250px;
+        background-color: rgba(18, 21, 34, 0.95);
+        border-radius: 10px;
+        color: white;
+        z-index: 1000;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        display: none;
+        overflow: hidden;
+        max-height: 80vh;
+        flex-direction: column;
+    }
+    
+    .music-player-modal.show {
+        display: flex;
+    }
+    
+    .music-player-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .music-player-title {
+        font-size: 14px;
+        font-weight: bold;
+    }
+    
+    .music-info {
+        padding: 8px 12px;
+        text-align: center;
+    }
+    
+    #musicTitle {
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .music-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px 12px 8px;
+    }
+    
+    .music-control-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+        padding: 0;
+        margin: 0 2px;
+    }
+    
+    .music-control-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .music-progress {
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 8px 12px;
+        cursor: pointer;
+        position: relative;
+        border-radius: 2px;
+    }
+    
+    .music-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #4d9aff, #ff6b8b);
+        width: 20%;
+        border-radius: 2px;
+        transition: width 0.1s linear;
+    }
+    
+    .music-time {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.7);
+        padding: 0 12px;
+        margin-bottom: 8px;
+    }
+    
+    /* 音量控制 */
+    .volume-control {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .volume-slider-container {
+        position: absolute;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 60px;
+        display: none;
+        z-index: 1100;
+    }
+    
+    .volume-slider-container.show {
+        display: block;
+    }
+    
+    .volume-slider {
+        -webkit-appearance: none;
+        width: 50px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.3);
+        outline: none;
+        transform: rotate(-90deg);
+        transform-origin: center;
+        position: absolute;
+        top: 30px;
+        left: -10px;
+    }
+    
+    .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+    }
+    
+    .volume-slider::-moz-range-thumb {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+        border: none;
+    }
+    
+    /* 播放列表部分 */
+    .music-list-section {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 8px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    
+    .music-list-header {
+        display: flex;
+        align-items: center;
+        padding: 0 12px 8px;
+        flex-wrap: wrap;
+    }
+    
+    .music-list-title {
+        font-size: 13px;
+        font-weight: bold;
+        margin-right: 8px;
+        white-space: nowrap;
+    }
+    
+    #songCount {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.7);
+        flex: 1;
+        white-space: nowrap;
+    }
+    
+    .music-list-actions {
+        display: flex;
+        gap: 4px;
+    }
+    
+    .music-refresh-btn,
+    .music-add-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+    
+    .music-refresh-btn:hover,
+    .music-add-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .music-search {
+        padding: 0 12px 8px;
+    }
+    
+    .music-search input {
+        width: 100%;
+        padding: 5px 8px;
+        border-radius: 12px;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 11px;
+        outline: none;
+    }
+    
+    .music-list {
+        overflow-y: auto;
+        max-height: 200px;
+        padding: 0 12px;
+    }
+    
+    .music-list::-webkit-scrollbar {
+        width: 3px;
+    }
+    
+    .music-list::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .music-list::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+    }
+    
+    .music-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        cursor: pointer;
+    }
+    
+    .music-item:last-child {
+        border-bottom: none;
+    }
+    
+    .music-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .music-item.playing {
+        color: #4d9aff;
+    }
+    
+    .music-item-info {
+        flex: 1;
+        overflow: hidden;
+        padding-right: 8px;
+    }
+    
+    .music-item-title {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .music-item-artist {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .music-item-actions {
+        display: flex;
+    }
+    
+    .music-action-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    
+    .music-action-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* 删除确认弹窗样式 */
+    #confirmDeleteMusicModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1200;
+    }
+    
+    #confirmDeleteMusicModal.show {
+        display: flex;
+    }
+    
+    #confirmDeleteMusicModal .modal-content {
+        width: 220px;
+        background: rgba(18, 21, 34, 0.95);
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+    }
+    
+    .delete-modal-body {
+        margin-bottom: 12px;
+        color: white;
+    }
+    
+    .delete-modal-body p {
+        margin: 0 0 10px 0;
+        font-size: 13px;
+    }
+    
+    .delete-modal-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .delete-btn-cancel,
+    .delete-btn-confirm {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 12px;
+    }
+    
+    .delete-btn-cancel {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+    
+    .delete-btn-confirm {
+        background: #ff5252;
+        color: white;
+    }
+    
+    .delete-btn-cancel:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .delete-btn-confirm:hover {
+        background: #ff3030;
+    }
+    
+    /* 动画效果 */
+    @keyframes musicNote {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+        100% { transform: translateY(0); }
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    #refreshMusicBtn.spinning {
+        animation: spin 1s linear;
+    }
+    
+    /* 音乐来源标识 */
+    .music-source {
+        font-size: 10px;
+        margin-left: 3px;
+        opacity: 0.7;
+    }
+    
+    .music-source.local {
+        color: #4fc3f7;
+    }
+    
+    .music-source.cloud {
+        color: #81c784;
+    }
+    
+    /* 空列表提示 */
+    .empty-music-tip {
+        text-align: center;
+        padding: 15px 0;
+        color: rgba(255, 255, 255, 0.5);
+        font-style: italic;
+        font-size: 12px;
+    }
+
+    /* 移动端适配样式 */
+    @media screen and (max-width: 768px) {
+        /* 页面整体布局 */
+        .page-container {
+            padding: 10px;
+        }
+        
+        /* 头部导航适配 */
+        .main-header {
+            padding: 10px;
+        }
+        
+        .main-nav {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        
+        /* 相册标题区域适配 */
+        .album-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+        }
+        
+        .album-title {
+            font-size: 20px;
+        }
+        
+        .album-actions {
+            width: 100%;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+        
+        /* 相册内容区域适配 */
+        .album-content {
+            padding: 10px;
+        }
+        
+        .photos-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .photo-item {
+            aspect-ratio: 1;
+        }
+        
+        /* 上传区域适配 */
+        .upload-area {
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        /* 音乐播放器适配 */
+        .music-player-modal {
+            width: 90%;
+            max-width: 300px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 80px;
+        }
+        
+        .music-player-icon {
+            top: 20px;
+            left: 20px;
+        }
+        
+        .music-controls {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .music-list {
+            max-height: 150px;
+        }
+        
+        /* 弹窗适配 */
+        .modal-content {
+            width: 90%;
+            max-width: 320px;
+            margin: 20px;
+            padding: 15px;
+        }
+        
+        /* 图片查看器适配 */
+        .image-viewer {
+            padding: 10px;
+        }
+        
+        .image-viewer-content {
+            width: 100%;
+            height: auto;
+        }
+        
+        .image-viewer-content img {
+            max-width: 100%;
+            max-height: 80vh;
+        }
+        
+        .zoom-controls {
+            bottom: 40px;
+        }
+        
+        /* 按钮和输入框适配 */
+        .btn {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        input[type="text"],
+        textarea {
+            width: 100%;
+            font-size: 16px;
+        }
+        
+        /* 相册描述适配 */
+        .album-description {
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        
+        /* 照片操作按钮适配 */
+        .photo-actions {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .photo-action-btn {
+            width: 35px;
+            height: 35px;
+            font-size: 16px;
+        }
+        
+        /* 批量操作工具栏适配 */
+        .batch-actions-toolbar {
+            padding: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        /* 排序下拉菜单适配 */
+        .sort-dropdown {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        /* 返回按钮适配 */
+        .back-btn {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        /* 音量控制适配 */
+        .volume-slider-container {
+            bottom: 35px;
+        }
+        
+        /* 空相册提示适配 */
+        .empty-album {
+            padding: 30px 15px;
+        }
+        
+        .empty-album i {
+            font-size: 40px;
+        }
+    }
+</style> 

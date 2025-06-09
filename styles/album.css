@@ -1,0 +1,770 @@
+/* 相册页面样式 */
+.album-content {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.album-header {
+    padding: 25px;
+    text-align: center;
+    border-radius: 20px;
+    margin-bottom: 30px;
+}
+
+.album-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.album-cover-thumbnail {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+}
+
+.album-cover-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.album-title-info {
+    text-align: left;
+}
+
+.album-header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.album-header p {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0;
+}
+
+.album-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-edit {
+    min-width: 120px;
+    text-align: center;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.btn-edit:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.photos-container {
+    padding: 25px;
+    border-radius: 20px;
+}
+
+.photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.photo-card {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.photo-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.5s ease;
+}
+
+.photo-card:hover img {
+    transform: scale(1.05);
+}
+
+.photo-card .photo-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.photo-card:hover .photo-info {
+    opacity: 1;
+}
+
+.photo-info h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.photo-info p {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* 添加照片按钮 */
+.add-photo-card {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-photo-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
+}
+
+.add-photo-card i {
+    font-size: 40px;
+    margin-bottom: 10px;
+    opacity: 0.7;
+}
+
+.add-photo-card p {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* 按钮样式 */
+.btn-delete {
+    background: rgba(255, 77, 77, 0.15);
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: rgba(255, 77, 77, 0.25);
+}
+
+.btn-submit {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    background: rgba(102, 187, 106, 0.3);
+}
+
+.btn-cancel {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* 照片上传区域 */
+.photo-upload-container {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.photo-preview {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.photo-preview:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.upload-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    opacity: 0.7;
+}
+
+.photo-preview.has-image .upload-icon,
+.photo-preview.has-image span {
+    display: none;
+}
+
+/* 表单动作区域 */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* 模态框 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 450px;
+    padding: 18px;
+    border-radius: 12px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-content h2 {
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.large-modal {
+    max-width: 700px;
+}
+
+.small-modal {
+    max-width: 350px;
+}
+
+/* 文本对齐辅助类 */
+.text-center {
+    text-align: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+/* 提示弹窗样式 */
+.alert-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.alert-icon i {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#alertTitle {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+#alertMessage {
+    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* 照片查看区域 */
+.photo-view-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#viewPhotoImg {
+    width: 100%;
+    max-height: 50vh;
+    object-fit: contain;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+
+.photo-details {
+    margin-bottom: 15px;
+}
+
+.photo-details h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.photo-details p {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.photo-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* 编辑相册选项 */
+.edit-album-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.edit-album-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    color: white;
+    height: 80px;
+}
+
+.edit-album-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+}
+
+.edit-album-option i {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.edit-album-option span {
+    font-size: 13px;
+}
+
+.edit-album-option.danger {
+    background: transparent;
+    border: 1px solid rgba(255, 77, 77, 0.3);
+}
+
+.edit-album-option.danger:hover {
+    background: rgba(255, 77, 77, 0.1);
+}
+
+/* 封面选择网格 */
+.album-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 5px;
+    margin-top: 8px;
+}
+
+.cover-option {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.cover-option:hover {
+    transform: scale(1.05);
+}
+
+.cover-option.selected {
+    border-color: rgba(255, 107, 139, 0.8);
+    box-shadow: 0 0 10px rgba(255, 107, 139, 0.5);
+}
+
+.cover-option img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 确认消息样式 */
+.confirm-message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(255, 77, 77, 0.1);
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.confirm-message i {
+    font-size: 22px;
+    color: #ff9800;
+}
+
+.confirm-message p {
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* 紧凑型弹窗 */
+.compact-modal {
+    max-width: 320px;
+    padding: 12px !important;
+}
+
+.compact-modal .modal-header {
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+}
+
+.compact-modal .modal-body {
+    padding: 0;
+}
+
+.compact-modal .modal-footer {
+    margin-top: 12px;
+    padding-top: 8px;
+}
+
+/* 删除操作按钮区域 */
+.delete-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.delete-actions .btn-cancel {
+    flex: 1;
+    text-align: center;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger-new {
+    flex: 1;
+    padding: 8px 15px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    color: white;
+    background: linear-gradient(to right, #ff5252, #ff1a1a);
+    box-shadow: 0 2px 5px rgba(255, 82, 82, 0.3);
+    text-align: center;
+}
+
+.btn-danger-new:hover {
+    background: linear-gradient(to right, #ff1a1a, #ff0000);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 7px rgba(255, 82, 82, 0.4);
+}
+
+/* 表单组样式调整 */
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* 模态框头部和底部 */
+.modal-header {
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 12px;
+    position: relative;
+    background: transparent;
+}
+
+.modal-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    text-align: left;
+}
+
+.modal-footer {
+    margin-top: 18px;
+    padding-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background: transparent;
+}
+
+/* 关闭按钮调整 */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    z-index: 1;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+/* 按钮样式调整 */
+.btn-primary, .btn-cancel, .btn-danger, .btn-submit {
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    background: transparent;
+}
+
+/* 封面上传容器 */
+.cover-upload-container {
+    margin-top: 8px;
+}
+
+.upload-placeholder {
+    height: 100px;
+    padding: 10px;
+}
+
+.upload-placeholder i {
+    font-size: 30px;
+}
+
+.upload-placeholder span {
+    font-size: 14px;
+}
+
+.preview-header {
+    padding: 8px 12px;
+}
+
+.preview-image {
+    height: 150px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .album-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .photos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    .edit-album-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .album-photos-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 照片管理头部 */
+.photos-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.photos-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-batch-manage, .btn-exit-manage {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-batch-manage:hover, .btn-exit-manage:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.btn-exit-manage {
+    background: rgba(255, 77, 77, 0.15);
+}
+
+.btn-exit-manage:hover {
+    background: rgba(255, 77, 77, 0.25);
+}
+
+/* 照片删除徽章 */
+.photo-card {
+    position: relative;
+}
+
+.delete-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 0, 0, 0.7);
+    border-radius: 50%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+}
+
+.photo-card.manage-mode .delete-badge {
+    display: flex;
+}
+
+.photo-card.manage-mode {
+    animation: shake 0.5s ease infinite;
+}
+
+@keyframes shake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-1deg); }
+    75% { transform: rotate(1deg); }
+}
+
+/* 修改弹窗底部关闭按钮 */
+#editAlbumModal .modal-footer {
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+#editAlbumModal .btn-cancel {
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    padding: 8px 0;
+}
+
+/* 调整弹窗内边距使其更紧凑 */
+#editAlbumModal .modal-content {
+    padding: 15px;
+}
+
+#editAlbumModal .modal-header {
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    background: transparent;
+    border-bottom: none;
+}
+
+#editAlbumModal .modal-body {
+    padding: 0;
+}
+
+/* 修改关闭按钮位置 */
+#editAlbumModal .close-btn {
+    top: 10px;
+    right: 10px;
+} 
